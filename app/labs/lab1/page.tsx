@@ -190,14 +190,7 @@ tag to tell browsers to render the gaps.
             id="wd-text-fields-last-name" />
           <h5>Text boxes</h5>
           <label>Biography:</label><br/>
-          <textarea id="wd-textarea" cols={30} rows={10}>Lorem ipsum dolor sit
-amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-cupidatat non proident, sunt in culpa qui officia deserunt mollit
-anim id est laborum.</textarea>
+          <textarea id="wd-textarea" cols={30} rows={10} defaultValue={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."} />
           <h5 id="wd-radio-buttons">Radio buttons</h5>
           <label>Favorite movie genre:</label><br />
           <input type="radio" name="radio-genre" id="wd-radio-comedy"/>
@@ -221,18 +214,18 @@ anim id est laborum.</textarea>
           <h4 id="wd-dropdowns">Dropdowns</h4>
           <h5>Select one</h5>
           <label htmlFor="wd-select-one-genre"> Favorite movie genre: </label><br/>
-          <select id="wd-select-one-genre">
+          <select id="wd-select-one-genre" defaultValue="SCIFI">
             <option value="COMEDY">Comedy</option>
             <option value="DRAMA">Drama</option>
-            <option selected value="SCIFI">Science Fiction</option>
+            <option value="SCIFI">Science Fiction</option>
             <option value="FANTASY">Fantasy</option>
           </select>
           <h5>Select many</h5>
           <label htmlFor="wd-select-many-genre"> Favorite movie genres: </label><br/>
-          <select multiple id="wd-select-many-genre">
-            <option value="COMEDY" selected>Comedy</option>
+          <select multiple id="wd-select-many-genre" defaultValue={["COMEDY", "SCIFI"]}>
+            <option value="COMEDY">Comedy</option>
             <option value="DRAMA">Drama</option>
-            <option value="SCIFI" selected>Science Fiction</option>
+            <option value="SCIFI">Science Fiction</option>
             <option value="FANTASY">Fantasy</option>
           </select>
           <h4>Other HTML field types</h4>
