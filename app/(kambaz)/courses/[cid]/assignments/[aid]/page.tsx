@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { FormControl, FormSelect, FormCheck, Row, Col, FormLabel, FormGroup } from "react-bootstrap";
 export default function AssignmentEditor() {

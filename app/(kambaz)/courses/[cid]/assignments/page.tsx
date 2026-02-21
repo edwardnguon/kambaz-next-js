@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { ListGroup, ListGroupItem, FormControl, InputGroup } from "react-bootstrap";
 import { BsGripVertical, BsSearch, BsPlus } from "react-icons/bs";
