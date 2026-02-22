@@ -1,22 +1,28 @@
 "use client";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { FormControl, FormSelect, FormCheck, Row, Col, FormLabel, FormGroup } from "react-bootstrap";
+import * as db from "../../../../database";
 export default function AssignmentEditor() {
+  const params = useParams();
+  const cid = params.cid as string;
+  const aid = params.aid as string;
+  const assignment = db.assignments.find((a: any) => a._id === aid);
   return (
     <div id="wd-assignments-editor">
       <FormGroup className="mb-3">
         <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
-        <FormControl id="wd-name" defaultValue="A1" className="form-control" />
+        <FormControl id="wd-name" defaultValue={assignment?.title || "Assignment"} className="form-control" />
       </FormGroup>
       <FormControl as="textarea" id="wd-description" rows={6} className="form-control mb-3"
-        defaultValue="The assignment is available online. Submit a link to the landing page of your Web application running on Vercel." />
+        defaultValue={assignment?.description || "The assignment is available online. Submit a link to the landing page of your Web application running on Vercel."} />
 
       <Row className="mb-3">
         <Col sm={4} className="text-end">
           <FormLabel htmlFor="wd-points">Points</FormLabel>
         </Col>
         <Col sm={8}>
-          <FormControl id="wd-points" defaultValue={100} className="form-control" />
+          <FormControl id="wd-points" defaultValue={assignment?.points || 100} className="form-control" />
         </Col>
       </Row>
 
@@ -92,8 +98,8 @@ export default function AssignmentEditor() {
 
       <hr />
       <div className="text-end">
-        <Link href="/courses/1234/assignments" className="btn btn-secondary me-2">Cancel</Link>
-        <Link href="/courses/1234/assignments" className="btn btn-danger">Save</Link>
+        <Link href={`/courses/${cid}/assignments`} className="btn btn-secondary me-2">Cancel</Link>
+        <Link href={`/courses/${cid}/assignments`} className="btn btn-danger">Save</Link>
       </div>
     </div>
   );

@@ -1,11 +1,16 @@
 "use client";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ListGroup, ListGroupItem, FormControl, InputGroup } from "react-bootstrap";
 import { BsGripVertical, BsSearch, BsPlus } from "react-icons/bs";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
+import * as db from "../../../database";
 export default function Assignments() {
+  const params = useParams();
+  const cid = params.cid as string;
+  const assignments = db.assignments.filter((a: any) => a.course === cid);
   return (
     <div id="wd-assignments">
       <div className="d-flex justify-content-between mb-3">
@@ -30,51 +35,28 @@ export default function Assignments() {
             </span>
           </div>
           <ListGroup className="rounded-0">
-            <ListGroupItem className="wd-lesson p-3 ps-1">
-              <div className="d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-3" />
-                <MdAssignment className="me-3 fs-3 text-success" />
-                <div className="flex-fill">
-                  <Link href="/courses/1234/assignments/A1" className="text-decoration-none text-dark fw-bold">A1</Link>
-                  <br />
-                  <span className="text-muted small">Multiple Modules | Not available until May 6 at 12:00am | Due May 13 at 11:59pm | 100 pts</span>
+            {assignments.map((assignment: any) => (
+              <ListGroupItem key={assignment._id} className="wd-lesson p-3 ps-1">
+                <div className="d-flex align-items-center">
+                  <BsGripVertical className="me-2 fs-3" />
+                  <MdAssignment className="me-3 fs-3 text-success" />
+                  <div className="flex-fill">
+                    <Link href={`/courses/${cid}/assignments/${assignment._id}`}
+                      className="text-decoration-none text-dark fw-bold">
+                      {assignment.title}
+                    </Link>
+                    <br />
+                    <span className="text-muted small">
+                      Multiple Modules | Not available until {assignment.availableDate} | Due {assignment.dueDate} | {assignment.points} pts
+                    </span>
+                  </div>
+                  <div className="float-end">
+                    <FaCheckCircle className="text-success me-2" />
+                    <IoEllipsisVertical className="fs-4" />
+                  </div>
                 </div>
-                <div className="float-end">
-                  <FaCheckCircle className="text-success me-2" />
-                  <IoEllipsisVertical className="fs-4" />
-                </div>
-              </div>
-            </ListGroupItem>
-            <ListGroupItem className="wd-lesson p-3 ps-1">
-              <div className="d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-3" />
-                <MdAssignment className="me-3 fs-3 text-success" />
-                <div className="flex-fill">
-                  <Link href="/courses/1234/assignments/A2" className="text-decoration-none text-dark fw-bold">A2</Link>
-                  <br />
-                  <span className="text-muted small">Multiple Modules | Not available until May 13 at 12:00am | Due May 20 at 11:59pm | 100 pts</span>
-                </div>
-                <div className="float-end">
-                  <FaCheckCircle className="text-success me-2" />
-                  <IoEllipsisVertical className="fs-4" />
-                </div>
-              </div>
-            </ListGroupItem>
-            <ListGroupItem className="wd-lesson p-3 ps-1">
-              <div className="d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-3" />
-                <MdAssignment className="me-3 fs-3 text-success" />
-                <div className="flex-fill">
-                  <Link href="/courses/1234/assignments/A3" className="text-decoration-none text-dark fw-bold">A3</Link>
-                  <br />
-                  <span className="text-muted small">Multiple Modules | Not available until May 20 at 12:00am | Due May 27 at 11:59pm | 100 pts</span>
-                </div>
-                <div className="float-end">
-                  <FaCheckCircle className="text-success me-2" />
-                  <IoEllipsisVertical className="fs-4" />
-                </div>
-              </div>
-            </ListGroupItem>
+              </ListGroupItem>
+            ))}
           </ListGroup>
         </ListGroupItem>
       </ListGroup>
