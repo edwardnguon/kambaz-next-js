@@ -20,6 +20,10 @@ export default function Labs() {
             Lab 3: JavaScript Fundamentals </Link>
         </ListGroupItem>
         <ListGroupItem>
+          <Link href="/labs/lab4" id="wd-lab4-link">
+            Lab 4: React State Management </Link>
+        </ListGroupItem>
+        <ListGroupItem>
           <Link href="/" id="wd-kambaz-link">
             Kambaz </Link>
         </ListGroupItem>

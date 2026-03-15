@@ -1,28 +1,71 @@
 "use client";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { FormControl, FormSelect, FormCheck, Row, Col, FormLabel, FormGroup } from "react-bootstrap";
-import * as db from "../../../../database";
+import { useSelector, useDispatch } from "react-redux";
+import { addAssignment, updateAssignment } from "../../../../courses/assignments/reducer";
+import { RootState } from "../../../../store";
+
 export default function AssignmentEditor() {
   const params = useParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const cid = params.cid as string;
   const aid = params.aid as string;
-  const assignment = db.assignments.find((a: any) => a._id === aid);
+  const isNew = aid === "new";
+
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
+  const existingAssignment = assignments.find((a: any) => a._id === aid);
+
+  const [assignment, setAssignment] = useState<any>(
+    isNew
+      ? {
+          title: "New Assignment",
+          description: "New Assignment Description",
+          points: 100,
+          course: cid,
+          dueDate: "",
+          availableDate: "",
+          availableUntil: "",
+        }
+      : {
+          ...existingAssignment,
+        }
+  );
+
+  const handleSave = () => {
+    if (isNew) {
+      dispatch(addAssignment(assignment));
+    } else {
+      dispatch(updateAssignment(assignment));
+    }
+    router.push(`/courses/${cid}/assignments`);
+  };
+
+  const handleCancel = () => {
+    router.push(`/courses/${cid}/assignments`);
+  };
+
   return (
     <div id="wd-assignments-editor">
       <FormGroup className="mb-3">
         <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
-        <FormControl id="wd-name" defaultValue={assignment?.title || "Assignment"} className="form-control" />
+        <FormControl id="wd-name" value={assignment?.title || ""}
+          onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
+          className="form-control" />
       </FormGroup>
       <FormControl as="textarea" id="wd-description" rows={6} className="form-control mb-3"
-        defaultValue={assignment?.description || "The assignment is available online. Submit a link to the landing page of your Web application running on Vercel."} />
+        value={assignment?.description || ""}
+        onChange={(e) => setAssignment({ ...assignment, description: e.target.value })} />
 
       <Row className="mb-3">
         <Col sm={4} className="text-end">
           <FormLabel htmlFor="wd-points">Points</FormLabel>
         </Col>
         <Col sm={8}>
-          <FormControl id="wd-points" defaultValue={assignment?.points || 100} className="form-control" />
+          <FormControl id="wd-points" value={assignment?.points || 100}
+            onChange={(e) => setAssignment({ ...assignment, points: parseInt(e.target.value) || 0 })}
+            className="form-control" />
         </Col>
       </Row>
 
@@ -81,15 +124,24 @@ export default function AssignmentEditor() {
             <strong>Assign to</strong>
             <FormControl id="wd-assign-to" defaultValue="Everyone" className="form-control mt-2 mb-3" />
             <strong>Due</strong>
-            <FormControl type="date" id="wd-due-date" defaultValue="2024-05-13" className="form-control mt-2 mb-3" />
+            <FormControl type="date" id="wd-due-date"
+              value={assignment?.dueDate || ""}
+              onChange={(e) => setAssignment({ ...assignment, dueDate: e.target.value })}
+              className="form-control mt-2 mb-3" />
             <Row>
               <Col>
                 <strong>Available from</strong>
-                <FormControl type="date" id="wd-available-from" defaultValue="2024-05-06" className="form-control mt-2" />
+                <FormControl type="date" id="wd-available-from"
+                  value={assignment?.availableDate || ""}
+                  onChange={(e) => setAssignment({ ...assignment, availableDate: e.target.value })}
+                  className="form-control mt-2" />
               </Col>
               <Col>
                 <strong>Until</strong>
-                <FormControl type="date" id="wd-available-until" className="form-control mt-2" />
+                <FormControl type="date" id="wd-available-until"
+                  value={assignment?.availableUntil || ""}
+                  onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}
+                  className="form-control mt-2" />
               </Col>
             </Row>
           </div>
@@ -98,8 +150,8 @@ export default function AssignmentEditor() {
 
       <hr />
       <div className="text-end">
-        <Link href={`/courses/${cid}/assignments`} className="btn btn-secondary me-2">Cancel</Link>
-        <Link href={`/courses/${cid}/assignments`} className="btn btn-danger">Save</Link>
+        <button onClick={handleCancel} className="btn btn-secondary me-2">Cancel</button>
+        <button onClick={handleSave} className="btn btn-danger">Save</button>
       </div>
     </div>
   );

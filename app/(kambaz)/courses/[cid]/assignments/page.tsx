@@ -1,18 +1,53 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ListGroup, ListGroupItem, FormControl, InputGroup } from "react-bootstrap";
+import { ListGroup, ListGroupItem, FormControl, InputGroup, Modal, Button } from "react-bootstrap";
 import { BsGripVertical, BsSearch, BsPlus } from "react-icons/bs";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTrash } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
-import * as db from "../../../database";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteAssignment } from "../../../courses/assignments/reducer";
+import { RootState } from "../../../store";
+
 export default function Assignments() {
-  const params = useParams();
-  const cid = params.cid as string;
-  const assignments = db.assignments.filter((a: any) => a.course === cid);
+  const { cid } = useParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
+  const filteredAssignments = assignments.filter((a: any) => a.course === cid);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
+
+  const confirmDelete = (assignment: any) => {
+    setAssignmentToDelete(assignment);
+    setShowDeleteDialog(true);
+  };
+
+  const handleDelete = () => {
+    if (assignmentToDelete) {
+      dispatch(deleteAssignment(assignmentToDelete._id));
+    }
+    setShowDeleteDialog(false);
+    setAssignmentToDelete(null);
+  };
+
   return (
     <div id="wd-assignments">
+      <Modal show={showDeleteDialog} onHide={() => setShowDeleteDialog(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to remove the assignment &quot;{assignmentToDelete?.title}&quot;?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteDialog(false)}>No</Button>
+          <Button variant="danger" onClick={handleDelete}>Yes</Button>
+        </Modal.Footer>
+      </Modal>
+
       <div className="d-flex justify-content-between mb-3">
         <InputGroup className="w-50">
           <InputGroup.Text><BsSearch /></InputGroup.Text>
@@ -20,7 +55,9 @@ export default function Assignments() {
         </InputGroup>
         <div>
           <button className="btn btn-secondary me-2"><BsPlus className="fs-5" />Group</button>
-          <button className="btn btn-danger"><BsPlus className="fs-5" />Assignment</button>
+          <Link href={`/courses/${cid}/assignments/new`} className="btn btn-danger">
+            <BsPlus className="fs-5" />Assignment
+          </Link>
         </div>
       </div>
 
@@ -35,7 +72,7 @@ export default function Assignments() {
             </span>
           </div>
           <ListGroup className="rounded-0">
-            {assignments.map((assignment: any) => (
+            {filteredAssignments.map((assignment: any) => (
               <ListGroupItem key={assignment._id} className="wd-lesson p-3 ps-1">
                 <div className="d-flex align-items-center">
                   <BsGripVertical className="me-2 fs-3" />
@@ -51,6 +88,8 @@ export default function Assignments() {
                     </span>
                   </div>
                   <div className="float-end">
+                    <FaTrash className="text-danger me-2" style={{ cursor: "pointer" }}
+                      onClick={() => confirmDelete(assignment)} />
                     <FaCheckCircle className="text-success me-2" />
                     <IoEllipsisVertical className="fs-4" />
                   </div>
