@@ -16,5 +16,10 @@
   { "_id": "15", "user": "123", "course": "RS104" },
   { "_id": "16", "user": "234", "course": "RS105" },
   { "_id": "17", "user": "567", "course": "RS105" },
-  { "_id": "18", "user": "789", "course": "RS105" }
+  { "_id": "18", "user": "789", "course": "RS105" },
+  { "_id": "19", "user": "100", "course": "RS101" },
+  { "_id": "20", "user": "100", "course": "RS102" },
+  { "_id": "21", "user": "100", "course": "RS103" },
+  { "_id": "22", "user": "100", "course": "RS104" },
+  { "_id": "23", "user": "100", "course": "RS105" }
 ]

@@ -1,5 +1,5 @@
 "use client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
@@ -9,14 +9,15 @@ import { Button, FormControl, FormSelect } from "react-bootstrap";
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
   const dispatch = useDispatch();
+  const router = useRouter();
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const fetchProfile = () => {
-    if (!currentUser) return redirect("/account/signin");
+    if (!currentUser) return router.push("/account/signin");
     setProfile(currentUser);
   };
   const signout = () => {
     dispatch(setCurrentUser(null));
-    redirect("/account/signin");
+    router.push("/account/signin");
   };
   useEffect(() => {
     fetchProfile();

@@ -1,3 +1,4 @@
+"use client";
 import { Modal, FormControl, Button } from "react-bootstrap";
 export default function ModuleEditor({ show, handleClose, dialogTitle, moduleName, setModuleName, addModule }: {
   show: boolean; handleClose: () => void; dialogTitle: string; moduleName: string; setModuleName: (name: string) => void;

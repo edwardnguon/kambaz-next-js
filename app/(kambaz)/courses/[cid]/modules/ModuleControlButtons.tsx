@@ -1,3 +1,4 @@
+"use client";
 import { FaTrash } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import { IoEllipsisVertical } from "react-icons/io5";
