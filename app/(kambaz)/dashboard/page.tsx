@@ -12,6 +12,7 @@ export default function Dashboard() {
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const { enrollments } = db;
   const dispatch = useDispatch();
+  const isFaculty = currentUser?.role === "FACULTY";
   const [course, setCourse] = useState<any>({
     _id: "0", name: "New Course", number: "New Number",
     startDate: "2023-09-10", endDate: "2023-12-15",
@@ -20,19 +21,23 @@ export default function Dashboard() {
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      <h5> New Course
-        <button className="btn btn-primary float-end"
-                onClick={() => dispatch(addNewCourse(course))} id="wd-add-new-course-click">
-          Add </button>
-        <button className="btn btn-warning float-end me-2"
-                onClick={() => dispatch(updateCourse(course))} id="wd-update-course-click">
-          Update </button>
-      </h5> <br />
-      <FormControl value={course.name} className="mb-2"
-        onChange={(e) => setCourse({ ...course, name: e.target.value })} />
-      <FormControl value={course.description} as="textarea" rows={3}
-        onChange={(e) => setCourse({ ...course, description: e.target.value })} />
-      <hr />
+      {isFaculty && (
+        <>
+          <h5> New Course
+            <button className="btn btn-primary float-end"
+                    onClick={() => dispatch(addNewCourse(course))} id="wd-add-new-course-click">
+              Add </button>
+            <button className="btn btn-warning float-end me-2"
+                    onClick={() => dispatch(updateCourse(course))} id="wd-update-course-click">
+              Update </button>
+          </h5> <br />
+          <FormControl value={course.name} className="mb-2"
+            onChange={(e) => setCourse({ ...course, name: e.target.value })} />
+          <FormControl value={course.description} as="textarea" rows={3}
+            onChange={(e) => setCourse({ ...course, description: e.target.value })} />
+          <hr />
+        </>
+      )}
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
@@ -58,21 +63,25 @@ export default function Dashboard() {
                     <Button variant="primary"> Go </Button>
                   </CardBody>
                 </Link>
-                <button onClick={(event) => {
-                          event.preventDefault();
-                          setCourse(c);
-                        }}
-                  className="btn btn-warning me-2 float-end"
-                  id="wd-edit-course-click" >
-                  Edit
-                </button>
-                <button onClick={(event) => {
-                          event.preventDefault();
-                          dispatch(deleteCourse(c._id));
-                        }} className="btn btn-danger float-end"
-                  id="wd-delete-course-click">
-                  Delete
-                </button>
+                {isFaculty && (
+                  <>
+                    <button onClick={(event) => {
+                              event.preventDefault();
+                              setCourse(c);
+                            }}
+                      className="btn btn-warning me-2 float-end"
+                      id="wd-edit-course-click" >
+                      Edit
+                    </button>
+                    <button onClick={(event) => {
+                              event.preventDefault();
+                              dispatch(deleteCourse(c._id));
+                            }} className="btn btn-danger float-end"
+                      id="wd-delete-course-click">
+                      Delete
+                    </button>
+                  </>
+                )}
               </Card>
             </Col>
           ))}

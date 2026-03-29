@@ -13,6 +13,8 @@ export default function AssignmentEditor() {
   const cid = params.cid as string;
   const aid = params.aid as string;
   const isNew = aid === "new";
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
 
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
   const existingAssignment = assignments.find((a: any) => a._id === aid);
@@ -151,7 +153,9 @@ export default function AssignmentEditor() {
       <hr />
       <div className="text-end">
         <button onClick={handleCancel} className="btn btn-secondary me-2">Cancel</button>
-        <button onClick={handleSave} className="btn btn-danger">Save</button>
+        {isFaculty && (
+          <button onClick={handleSave} className="btn btn-danger">Save</button>
+        )}
       </div>
     </div>
   );

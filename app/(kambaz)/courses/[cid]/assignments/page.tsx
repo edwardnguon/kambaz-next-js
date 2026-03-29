@@ -16,6 +16,8 @@ export default function Assignments() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
   const filteredAssignments = assignments.filter((a: any) => a.course === cid);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
@@ -53,12 +55,14 @@ export default function Assignments() {
           <InputGroup.Text><BsSearch /></InputGroup.Text>
           <FormControl placeholder="Search for Assignments" id="wd-search-assignment" />
         </InputGroup>
-        <div>
-          <button className="btn btn-secondary me-2"><BsPlus className="fs-5" />Group</button>
-          <Link href={`/courses/${cid}/assignments/new`} className="btn btn-danger">
-            <BsPlus className="fs-5" />Assignment
-          </Link>
-        </div>
+        {isFaculty && (
+          <div>
+            <button className="btn btn-secondary me-2"><BsPlus className="fs-5" />Group</button>
+            <Link href={`/courses/${cid}/assignments/new`} className="btn btn-danger">
+              <BsPlus className="fs-5" />Assignment
+            </Link>
+          </div>
+        )}
       </div>
 
       <ListGroup className="rounded-0" id="wd-assignment-list">
@@ -88,8 +92,10 @@ export default function Assignments() {
                     </span>
                   </div>
                   <div className="float-end">
-                    <FaTrash className="text-danger me-2" style={{ cursor: "pointer" }}
-                      onClick={() => confirmDelete(assignment)} />
+                    {isFaculty && (
+                      <FaTrash className="text-danger me-2" style={{ cursor: "pointer" }}
+                        onClick={() => confirmDelete(assignment)} />
+                    )}
                     <FaCheckCircle className="text-success me-2" />
                     <IoEllipsisVertical className="fs-4" />
                   </div>
