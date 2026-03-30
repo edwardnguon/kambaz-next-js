@@ -80,8 +80,9 @@ export default function Dashboard() {
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard
         <button className="btn btn-primary float-end"
+          id="wd-toggle-enrollments"
           onClick={() => setShowAllCourses(!showAllCourses)}>
-          {showAllCourses ? "My Courses" : "All Courses"}
+          Enrollments
         </button>
       </h1> <hr />
       {isFaculty && (

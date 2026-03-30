@@ -1,19 +1,20 @@
 "use client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import * as client from "../client";
 
 export default function Signin() {
-  const [credentials, setCredentials] = useState<any>({ username: "", password: "" });
+  const [credentials, setCredentials] = useState({ username: "ednguon2005", password: "123" });
   const dispatch = useDispatch();
+  const router = useRouter();
   const signin = async () => {
     const user = await client.signin(credentials);
     if (!user) return;
     dispatch(setCurrentUser(user));
-    redirect("/dashboard");
+    router.push("/dashboard");
   };
   return (
     <div id="wd-signin-screen">
