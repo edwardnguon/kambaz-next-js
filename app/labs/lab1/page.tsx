@@ -1,7 +1,27 @@
+import Link from "next/link";
 export default function Lab1() {
   return (
     <div id="wd-lab1">
       <h2>Lab 1</h2>
+      <h4>Edward Nguon - Section 02</h4>
+      <h5>Lab Assignments</h5>
+      <ul>
+        <li><Link href="/labs/lab1">Lab 1</Link></li>
+        <li><Link href="/labs/lab2">Lab 2</Link></li>
+        <li><Link href="/labs/lab3">Lab 3</Link></li>
+        <li><Link href="/labs/lab4">Lab 4</Link></li>
+        <li><Link href="/labs/lab5">Lab 5</Link></li>
+      </ul>
+      <h5>Applications</h5>
+      <ul>
+        <li><Link href="/">Kambaz Application</Link></li>
+      </ul>
+      <h5>Source Code Repositories</h5>
+      <ul>
+        <li><a href="https://github.com/edwardnguon/kambaz-next-js" id="wd-github">kambaz-next-js (React)</a></li>
+        <li><a href="https://github.com/edwardnguon/kambaz-node-server-app" id="wd-github-server">kambaz-node-server-app (Server)</a></li>
+      </ul>
+      <hr />
       <h3>HTML Examples</h3>
       <div id="wd-h-tag">
         <h4>Heading Tags</h4>

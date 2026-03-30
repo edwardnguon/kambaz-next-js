@@ -19,10 +19,20 @@ export default function TOC() {
         <NavLink href="/labs/lab3" as={Link} className={`nav-link ${pathname.endsWith("lab3") ? "active" : ""}`}>
           Lab 3 </NavLink> </NavItem>
       <NavItem>
+        <NavLink href="/labs/lab4" as={Link} className={`nav-link ${pathname.includes("lab4") ? "active" : ""}`}>
+          Lab 4 </NavLink> </NavItem>
+      <NavItem>
+        <NavLink href="/labs/lab5" as={Link} className={`nav-link ${pathname.includes("lab5") ? "active" : ""}`}>
+          Lab 5 </NavLink> </NavItem>
+      <NavItem>
         <NavLink href="/" as={Link}>
           Kambaz </NavLink> </NavItem>
       <NavItem>
-        <NavLink href="https://github.com/edwardnguon/kambaz-next-js" id="wd-github">My GitHub</NavLink></NavItem>
+        <NavLink href="https://github.com/edwardnguon/kambaz-next-js" id="wd-github">React GitHub</NavLink></NavItem>
+      <NavItem>
+        <NavLink href="https://github.com/edwardnguon/kambaz-node-server-app" id="wd-github-server">Server GitHub</NavLink></NavItem>
+      <NavItem>
+        <NavLink href={process.env.NEXT_PUBLIC_HTTP_SERVER || "#"} id="wd-server">Server</NavLink></NavItem>
     </Nav>
   );
 }

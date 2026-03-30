@@ -1,23 +1,28 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 import { RootState } from "../../store";
 import { Button, FormControl, FormSelect } from "react-bootstrap";
+import * as client from "../client";
 
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
   const dispatch = useDispatch();
-  const router = useRouter();
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
   const fetchProfile = () => {
-    if (!currentUser) return router.push("/account/signin");
+    if (!currentUser) return redirect("/account/signin");
     setProfile(currentUser);
   };
-  const signout = () => {
+  const signout = async () => {
+    await client.signout();
     dispatch(setCurrentUser(null));
-    router.push("/account/signin");
+    redirect("/account/signin");
   };
   useEffect(() => {
     fetchProfile();
@@ -52,9 +57,12 @@ export default function Profile() {
             <option value="FACULTY">Faculty</option>
             <option value="STUDENT">Student</option>
           </FormSelect>
-          <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
-            Sign out
-          </Button>
+          <div>
+            <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>
+            <button onClick={signout} className="wd-signout-btn btn btn-danger w-100">
+              Sign out
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FormControl, FormSelect, FormCheck, Row, Col, FormLabel, FormGroup } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { addAssignment, updateAssignment } from "../../../../courses/assignments/reducer";
+import { setAssignments } from "../../../../courses/assignments/reducer";
 import { RootState } from "../../../../store";
+import * as client from "../../../client";
 
 export default function AssignmentEditor() {
   const params = useParams();
@@ -35,11 +36,15 @@ export default function AssignmentEditor() {
         }
   );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isNew) {
-      dispatch(addAssignment(assignment));
+      const newAssignment = await client.createAssignmentForCourse(cid, assignment);
+      dispatch(setAssignments([...assignments, newAssignment]));
     } else {
-      dispatch(updateAssignment(assignment));
+      await client.updateAssignment(assignment);
+      dispatch(setAssignments(assignments.map((a: any) =>
+        a._id === assignment._id ? assignment : a
+      )));
     }
     router.push(`/courses/${cid}/assignments`);
   };
