@@ -28,6 +28,10 @@ export default function Signin() {
       <button onClick={signin} id="wd-signin-btn" className="btn btn-primary w-100 mb-2">
         Sign in </button>
       <Link id="wd-signup-link" href="/account/signup">Sign up</Link>
+      <hr />
+      <div className="text-muted small">
+        <strong>Admin login:</strong> admin / 123
+      </div>
     </div>
   );
 }
