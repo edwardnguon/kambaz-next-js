@@ -86,6 +86,7 @@ export default function Profile() {
           <option value="ADMIN">Admin</option>
           <option value="FACULTY">Faculty</option>
           <option value="STUDENT">Student</option>
+          <option value="TA">TA</option>
         </FormSelect>
         <div>
           <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>

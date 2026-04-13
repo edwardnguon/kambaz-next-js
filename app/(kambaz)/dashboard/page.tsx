@@ -64,12 +64,12 @@ export default function Dashboard() {
     fetchAllCourses();
   };
   const onEnroll = async (courseId: string) => {
-    await client.enrollInCourse(courseId);
+    await client.enrollIntoCourse("current", courseId);
     await fetchCourses();
     await fetchAllCourses();
   };
   const onUnenroll = async (courseId: string) => {
-    await client.unenrollFromCourse(courseId);
+    await client.unenrollUserFromCourse("current", courseId);
     await fetchCourses();
     await fetchAllCourses();
   };

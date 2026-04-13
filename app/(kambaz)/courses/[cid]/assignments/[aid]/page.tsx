@@ -1,11 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FormControl, FormSelect, FormCheck, Row, Col, FormLabel, FormGroup } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setAssignments } from "../../../../courses/assignments/reducer";
 import { RootState } from "../../../../store";
 import * as client from "../../../client";
+
+const monthNumbers: Record<string, string> = {
+  jan: "01",
+  feb: "02",
+  mar: "03",
+  apr: "04",
+  may: "05",
+  jun: "06",
+  jul: "07",
+  aug: "08",
+  sep: "09",
+  oct: "10",
+  nov: "11",
+  dec: "12",
+};
+
+function normalizeDateInputValue(value?: string) {
+  if (!value) {
+    return "";
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return value;
+  }
+  const match = value.match(/^([A-Za-z]{3})\s+(\d{1,2})/);
+  if (!match) {
+    return "";
+  }
+  const month = monthNumbers[match[1].toLowerCase()];
+  if (!month) {
+    return "";
+  }
+  return `2024-${month}-${match[2].padStart(2, "0")}`;
+}
 
 export default function AssignmentEditor() {
   const params = useParams();
@@ -19,6 +52,7 @@ export default function AssignmentEditor() {
 
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
   const existingAssignment = assignments.find((a: any) => a._id === aid);
+  const [loadingAssignment, setLoadingAssignment] = useState(!isNew && !existingAssignment);
 
   const [assignment, setAssignment] = useState<any>(
     isNew
@@ -36,6 +70,32 @@ export default function AssignmentEditor() {
         }
   );
 
+  useEffect(() => {
+    if (isNew) {
+      setLoadingAssignment(false);
+      return;
+    }
+    if (existingAssignment) {
+      setAssignment(existingAssignment);
+      setLoadingAssignment(false);
+      return;
+    }
+
+    const loadAssignment = async () => {
+      const courseAssignments = await client.findAssignmentsForCourse(cid);
+      dispatch(setAssignments(courseAssignments));
+      const matchedAssignment = courseAssignments.find((a: any) => a._id === aid);
+      if (!matchedAssignment) {
+        router.replace(`/courses/${cid}/assignments`);
+        return;
+      }
+      setAssignment(matchedAssignment);
+      setLoadingAssignment(false);
+    };
+
+    loadAssignment();
+  }, [aid, cid, dispatch, existingAssignment, isNew, router]);
+
   const handleSave = async () => {
     if (isNew) {
       const newAssignment = await client.createAssignmentForCourse(cid, assignment);
@@ -52,6 +112,10 @@ export default function AssignmentEditor() {
   const handleCancel = () => {
     router.push(`/courses/${cid}/assignments`);
   };
+
+  if (loadingAssignment) {
+    return <div>Loading assignment...</div>;
+  }
 
   return (
     <div id="wd-assignments-editor">
@@ -132,21 +196,21 @@ export default function AssignmentEditor() {
             <FormControl id="wd-assign-to" defaultValue="Everyone" className="form-control mt-2 mb-3" />
             <strong>Due</strong>
             <FormControl type="date" id="wd-due-date"
-              value={assignment?.dueDate || ""}
+              value={normalizeDateInputValue(assignment?.dueDate)}
               onChange={(e) => setAssignment({ ...assignment, dueDate: e.target.value })}
               className="form-control mt-2 mb-3" />
             <Row>
               <Col>
                 <strong>Available from</strong>
                 <FormControl type="date" id="wd-available-from"
-                  value={assignment?.availableDate || ""}
+                  value={normalizeDateInputValue(assignment?.availableDate)}
                   onChange={(e) => setAssignment({ ...assignment, availableDate: e.target.value })}
                   className="form-control mt-2" />
               </Col>
               <Col>
                 <strong>Until</strong>
                 <FormControl type="date" id="wd-available-until"
-                  value={assignment?.availableUntil || ""}
+                  value={normalizeDateInputValue(assignment?.availableUntil)}
                   onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}
                   className="form-control mt-2" />
               </Col>

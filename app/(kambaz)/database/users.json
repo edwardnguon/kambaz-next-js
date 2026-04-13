@@ -110,5 +110,19 @@
     "role": "FACULTY",
     "lastActivity": "2020-11-10",
     "totalActivity": "20:23:34"
+  },
+  {
+    "_id": "admin-user-001",
+    "username": "admin",
+    "password": "123",
+    "firstName": "Admin",
+    "lastName": "User",
+    "email": "admin@kambaz.com",
+    "dob": "1990-01-01",
+    "loginId": "001234569S",
+    "section": "S101",
+    "role": "ADMIN",
+    "lastActivity": "2024-01-15",
+    "totalActivity": "40:00:00"
   }
 ]
