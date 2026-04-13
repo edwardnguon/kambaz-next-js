@@ -16,6 +16,12 @@ export default function AccountNavigation() {
           {link.charAt(0).toUpperCase() + link.slice(1)}
         </Link>
       ))}
+      {currentUser && currentUser.role === "ADMIN" && (
+        <Link href="/account/users"
+          className={`list-group-item text-danger border-0 ${pathname.includes("users") ? "active" : ""}`}>
+          Users
+        </Link>
+      )}
     </div>
   );
 }

@@ -82,7 +82,7 @@ export default function Dashboard() {
         <button className="btn btn-primary float-end"
           id="wd-toggle-enrollments"
           onClick={() => setShowAllCourses(!showAllCourses)}>
-          Enrollments
+          {showAllCourses ? "My Courses" : "All Courses"}
         </button>
       </h1> <hr />
       {isFaculty && (
