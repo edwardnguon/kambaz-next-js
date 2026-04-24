@@ -3,13 +3,21 @@ import * as client from "./client";
 import { useEffect, useState } from "react";
 import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";
+import { getStoredCurrentUser } from "./storage";
 export default function Session({ children }: { children: any }) {
   const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
   const fetchProfile = async () => {
-    const currentUser = await client.profile();
-    if (currentUser) {
-      dispatch(setCurrentUser(currentUser));
+    try {
+      const currentUser = await client.profile();
+      if (currentUser) {
+        dispatch(setCurrentUser(currentUser));
+      }
+    } catch {
+      const storedUser = getStoredCurrentUser();
+      if (storedUser) {
+        dispatch(setCurrentUser(storedUser));
+      }
     }
     setPending(false);
   };

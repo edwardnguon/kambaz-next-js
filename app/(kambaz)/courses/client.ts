@@ -1,5 +1,21 @@
 import axios from "axios";
+import { getStoredCurrentUser } from "../account/storage";
+
 const axiosWithCredentials = axios.create({ withCredentials: true });
+axiosWithCredentials.interceptors.request.use((config) => {
+  const currentUser = getStoredCurrentUser();
+  if (currentUser?._id) {
+    if (config.headers?.set) {
+      config.headers.set("x-user-id", currentUser._id);
+    } else {
+      config.headers = {
+        ...(config.headers || {}),
+        "x-user-id": currentUser._id,
+      } as any;
+    }
+  }
+  return config;
+});
 const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
 const COURSES_API = `${HTTP_SERVER}/api/courses`;
 const USERS_API = `${HTTP_SERVER}/api/users`;
